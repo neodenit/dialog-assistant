@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.DialogAssistant", "Neodenit.DialogAssistant\Neodenit.DialogAssistant.csproj", "{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9345FC9E-40B2-470D-BF00-0C92F8B93893}
+	EndGlobalSection
+EndGlobal
