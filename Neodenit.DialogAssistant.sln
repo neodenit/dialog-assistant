@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Neodenit.DialogAssistant", "Neodenit.DialogAssistant\Neodenit.DialogAssistant.csproj", "{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.DialogAssistant", "Neodenit.DialogAssistant\Neodenit.DialogAssistant.csproj", "{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.DialogAssistant.Services", "Neodenit.DialogAssistant.Services\Neodenit.DialogAssistant.Services.csproj", "{4751A4A9-DC04-4FE1-946A-699B5999E11C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.DialogAssistant.DataAccess", "Neodenit.DialogAssistant.DataAccess\Neodenit.DialogAssistant.DataAccess.csproj", "{2C90C2D9-0ED5-49CF-8413-154E0E864027}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Neodenit.DialogAssistant.Shared", "Neodenit.DialogAssistant.Shared\Neodenit.DialogAssistant.Shared.csproj", "{0F987C2A-7A76-4878-BD06-AC1064326165}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54726C9A-6BCA-41F8-B4C2-40EC8525E1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4751A4A9-DC04-4FE1-946A-699B5999E11C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4751A4A9-DC04-4FE1-946A-699B5999E11C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4751A4A9-DC04-4FE1-946A-699B5999E11C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4751A4A9-DC04-4FE1-946A-699B5999E11C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C90C2D9-0ED5-49CF-8413-154E0E864027}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C90C2D9-0ED5-49CF-8413-154E0E864027}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C90C2D9-0ED5-49CF-8413-154E0E864027}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C90C2D9-0ED5-49CF-8413-154E0E864027}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F987C2A-7A76-4878-BD06-AC1064326165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F987C2A-7A76-4878-BD06-AC1064326165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F987C2A-7A76-4878-BD06-AC1064326165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F987C2A-7A76-4878-BD06-AC1064326165}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,7 +10,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Neodenit.DialogAssistant.Areas.Identity;
-using Neodenit.DialogAssistant.Data;
+using Neodenit.DialogAssistant.DataAccess;
+using Neodenit.DialogAssistant.DataAccess.Repositories;
+using Neodenit.DialogAssistant.Services;
+using Neodenit.DialogAssistant.Services.Services;
+using Neodenit.DialogAssistant.Shared;
+using Neodenit.DialogAssistant.Shared.Interfaces;
 
 namespace Neodenit.DialogAssistant
 {
@@ -36,7 +41,37 @@ namespace Neodenit.DialogAssistant
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddSingleton<WeatherForecastService>();
+
+            services.AddScoped<DbContext, ApplicationDbContext>();
+
+            services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
+            services.AddTransient(typeof(IDialogRepository), typeof(DialogRepository));
+            services.AddTransient(typeof(IUserRepository), typeof(UserRepository));
+
+            services.AddTransient<IAuthService, AuthService>();
+            services.AddTransient<IDialogService, DialogService>();
+            services.AddTransient<IIdentityUserService, IdentityUserService>();
+            services.AddTransient<IGPT3Service, GPT3Service>();
+            services.AddTransient<ITokenLimitService, TokenLimitService>();
+            services.AddTransient<IPricingService, PricingService>();
+            services.AddTransient<ITextService, TextService>();
+            services.AddTransient<IPrivacyService, PrivacyService>();
+
+            services.AddSingleton<ISettings>(provider =>
+            {
+                var settings = new Settings();
+                Configuration.Bind(settings);
+                return settings;
+            });
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+            });
+
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -45,8 +80,10 @@ namespace Neodenit.DialogAssistant
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContext dbContext)
         {
+            dbContext.Database.Migrate();
+
             app.UseResponseCompression();
 
             if (env.IsDevelopment())

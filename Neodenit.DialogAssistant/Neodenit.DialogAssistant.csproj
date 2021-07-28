@@ -14,4 +14,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.8" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Neodenit.DialogAssistant.Services\Neodenit.DialogAssistant.Services.csproj" />
+  </ItemGroup>
+
 </Project>

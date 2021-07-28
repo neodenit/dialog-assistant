@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Neodenit.DialogAssistant.Data.Migrations
+namespace Neodenit.DialogAssistant.DataAccess.Migrations
 {
     public partial class CreateIdentitySchema : Migration
     {

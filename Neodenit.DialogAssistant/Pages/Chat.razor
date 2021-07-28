@@ -1,64 +1,118 @@
-﻿@page "/chat"
+﻿@page "/chat/{receiver}"
 @using Microsoft.AspNetCore.SignalR.Client
+@using Neodenit.DialogAssistant.Shared.Interfaces
+@using Neodenit.DialogAssistant.Shared.Models
 @inject NavigationManager NavigationManager
+@inject IDialogService DialogService
+@inject IGPT3Service GPT3Service
+@inject IAuthService AuthService
 @implements IAsyncDisposable
+<AuthorizeView>
+    <Authorized>
 
-<div class="form-group">
-    <label>
-        User:
-        <input @bind="userInput" />
-    </label>
-</div>
-<div class="form-group">
-    <label>
-        Message:
-        <input @bind="messageInput" size="50" />
-    </label>
-</div>
-<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+        <ul class="list-group pb-3">
+            @foreach (var message in messages)
+                {
+            <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
+            }
+        </ul>
 
-<hr>
 
-<ul id="messagesList">
-    @foreach (var message in messages)
-    {
-        <li>@message</li>
-    }
-</ul>
-
-@code {
-    private HubConnection hubConnection;
-    private List<string> messages = new List<string>();
-    private string userInput;
-    private string messageInput;
-
-    protected override async Task OnInitializedAsync()
-    {
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
-            .Build();
-
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
+        @if (!string.IsNullOrEmpty(prediction))
         {
-            var encodedMsg = $"{user}: {message}";
-            messages.Add(encodedMsg);
-            StateHasChanged();
-        });
-
-        await hubConnection.StartAsync();
-    }
-
-    async Task Send() =>
-        await hubConnection.SendAsync("SendMessage", userInput, messageInput);
-
-    public bool IsConnected =>
-        hubConnection.State == HubConnectionState.Connected;
-
-    public async ValueTask DisposeAsync()
-    {
-        if (hubConnection is not null)
-        {
-            await hubConnection.DisposeAsync();
+            <div class="alert alert-success pb-3">
+                <span class='font-weight-bold'>@Receiver</span>
+                may answer something like this:
+                <span class='font-weight-bold'>@prediction</span>
+            </div>
         }
-    }
-}
+
+        <div class="alert alert-success pb-3">
+            Your daily credit: @(credit)%
+        </div>
+
+        <div class="input-group">
+            <input @bind="messageInput" @oninput="Predict" type="text" class="form-control" placeholder="Message" autofocus>
+            <div class="input-group-append">
+                <button @onclick="Send" disabled="@(!IsConnected)" class="btn btn-outline-secondary" type="button">Send</button>
+            </div>
+        </div>
+
+        @code {
+            [Parameter]
+            public string Receiver { get; set; }
+
+            private HubConnection hubConnection;
+            private List<Message> messages;
+            private string userInput;
+            private string messageInput;
+
+            private string prediction;
+            private double credit = 100;
+
+            protected override async Task OnInitializedAsync()
+            {
+                var userName = await AuthService.GetNameAsync();
+
+                var dialog = DialogService.GetDialogForMessage(new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver } });
+                messages = dialog is null ? new List<Message>() : dialog.Messages.ToList();
+                hubConnection = new HubConnectionBuilder()
+                .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+                .Build();
+
+                hubConnection.On<Message>("ReceiveMessage", async (message) =>
+                {
+
+                    if ((message.Sender.Name == userName || message.Receiver.Name == userName) && message.Sender.Name != message.Receiver.Name)
+                    {
+                        messages.Add(message);
+                        StateHasChanged();
+
+                        if (message.Sender.Name == userName)
+                        {
+                            await DialogService.AddMessageToDialogAsync(message);
+                        }
+                    }
+                });
+
+                await hubConnection.StartAsync();
+            }
+
+            async Task Send()
+            {
+                var userName = await AuthService.GetNameAsync();
+
+                await hubConnection.SendAsync("SendMessage", new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = messageInput });
+            }
+
+            public bool IsConnected =>
+            hubConnection.State == HubConnectionState.Connected;
+
+            async Task Predict(ChangeEventArgs e)
+            {
+                var userName = await AuthService.GetNameAsync();
+
+                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = e.Value.ToString() };
+                var result = await GPT3Service.GetPredictionAsync(message);
+
+                if (result.Status == ResponseStatus.Success)
+                {
+                    prediction = result.Text;
+                    credit = 100 - result.Credit * 100;
+                }
+            }
+
+            public async ValueTask DisposeAsync()
+            {
+                if (hubConnection is not null)
+                {
+                    await hubConnection.DisposeAsync();
+                }
+            }
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <h3>Please log in!</h3>
+    </NotAuthorized>
+</AuthorizeView>

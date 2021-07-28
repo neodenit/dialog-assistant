@@ -1,7 +1,30 @@
 ﻿@page "/"
+@using Neodenit.DialogAssistant.Shared.Interfaces;
+@inject IIdentityUserService IdentityUserService
 
-<h1>Hello, world!</h1>
+<AuthorizeView>
+    <Authorized>
+        <h1>Users</h1>
 
-Welcome to your new app.
+        @{
+            var name = context.User.Identity.Name;
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+            var users = IdentityUserService.GetAll();
+            var filteredUsers = users.Where(u => u != name);
+            var orderedUsers = filteredUsers.OrderBy(u => u);
+
+            foreach (var user in orderedUsers)
+            {
+                var href = $"chat/{user}";
+
+                <div class="list-group">
+                    <a href="@href" class="list-group-item list-group-item-action">@user</a>
+                </div>
+            }
+        }
+
+    </Authorized>
+    <NotAuthorized>
+        <h3>Please log in!</h3>
+    </NotAuthorized>
+</AuthorizeView>
