@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Neodenit.DialogAssistant.Shared;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using Neodenit.DialogAssistant.Shared.Models;
@@ -14,13 +15,15 @@ namespace Neodenit.DialogAssistant.Services
         private readonly ITokenLimitService limitCheckerService;
         private readonly ITextService textService;
         private readonly IDialogRepository dialogRepository;
+        private readonly ILogger<GPT3Service> logger;
         private readonly ISettings settings;
 
-        public GPT3Service(ITokenLimitService limitCheckerService, ITextService textService, IDialogRepository dialogRepository, ISettings settings)
+        public GPT3Service(ITokenLimitService limitCheckerService, ITextService textService, IDialogRepository dialogRepository, ILogger<GPT3Service> logger, ISettings settings)
         {
             this.limitCheckerService = limitCheckerService ?? throw new ArgumentNullException(nameof(limitCheckerService));
             this.textService = textService ?? throw new ArgumentNullException(nameof(textService));
             this.dialogRepository = dialogRepository ?? throw new ArgumentNullException(nameof(dialogRepository));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
@@ -57,6 +60,10 @@ namespace Neodenit.DialogAssistant.Services
                     CompletionResult completionResult = await api.Completions.CreateCompletionAsync(dialogTextWithReceiver, settings.MaxTokens, stopSequences: Constants.StopSequences2);
                     var completion = completionResult.Completions.First();
                     var predictionText = completion.FinishReason == Constants.LengthFinishReason ? $"{completion.Text}{Constants.Ellipsis}" : completion.Text;
+
+
+                    logger.LogInformation(dialogTextWithReceiver);
+                    logger.LogInformation(completion.Text);
 
                     await limitCheckerService.UpdateLimitAsync(message.Sender.Name, dialogTextWithReceiver, predictionText);
                     double credit = limitCheckerService.GetLimit(message.Sender.Name);
