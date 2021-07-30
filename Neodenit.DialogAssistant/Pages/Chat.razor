@@ -84,6 +84,8 @@
                 var userName = await AuthService.GetNameAsync();
 
                 await hubConnection.SendAsync("SendMessage", new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = messageInput });
+
+                messageInput = string.Empty;
             }
 
             public bool IsConnected =>
