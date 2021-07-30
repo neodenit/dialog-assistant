@@ -9,14 +9,16 @@
 @implements IAsyncDisposable
 <AuthorizeView>
     <Authorized>
+        <div class="alert alert-success pb-3">
+            Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(Receiver).
+        </div>
 
         <ul class="list-group pb-3">
             @foreach (var message in messages)
-                {
-            <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
+            {
+                <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
             }
         </ul>
-
 
         @if (!string.IsNullOrEmpty(prediction))
         {
@@ -27,7 +29,7 @@
             </div>
         }
 
-        <div class="alert alert-success pb-3">
+        <div class="alert alert-warning pb-3">
             Your daily credit: @(credit)%
         </div>
 
