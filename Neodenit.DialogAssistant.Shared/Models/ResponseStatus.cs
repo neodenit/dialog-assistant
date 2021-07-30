@@ -5,6 +5,7 @@
         None,
         Success,
         NoCredit,
-        NoSentences
+        NoSentences,
+        Editing
     }
 }

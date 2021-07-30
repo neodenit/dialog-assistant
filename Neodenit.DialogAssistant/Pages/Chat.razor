@@ -49,6 +49,7 @@
 
             private string prediction;
             private double credit = 100;
+            private ResponseStatus status;
 
             protected override async Task OnInitializedAsync()
             {
@@ -93,9 +94,11 @@
                 var userName = await AuthService.GetNameAsync();
 
                 var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = e.Value.ToString() };
-                var result = await GPT3Service.GetPredictionAsync(message);
+                var result = await GPT3Service.GetPredictionAsync(message, status);
 
-                if (result.Status == ResponseStatus.Success)
+                status = result.Status;
+
+                if (status == ResponseStatus.Success)
                 {
                     prediction = result.Text;
                     credit = 100 - result.Credit * 100;

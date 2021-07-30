@@ -5,6 +5,6 @@ namespace Neodenit.DialogAssistant.Shared.Interfaces
 {
     public interface IGPT3Service
     {
-        Task<Response> GetPredictionAsync(Message message);
+        Task<Response> GetPredictionAsync(Message message, ResponseStatus prevStatus);
     }
 }

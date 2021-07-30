@@ -24,13 +24,13 @@ namespace Neodenit.DialogAssistant.Services
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public async Task<Response> GetPredictionAsync(Message message)
+        public async Task<Response> GetPredictionAsync(Message message, ResponseStatus prevStatus)
         {
             bool isFullSentence = textService.IsFullSentence(message.Text);
 
             message.SendTime = DateTime.UtcNow;
 
-            if (isFullSentence)
+            if (isFullSentence && prevStatus == ResponseStatus.NoSentences)
             {
                 var dbDialog = dialogRepository.GetByUserNames(message.Sender.Name, message.Receiver.Name);
 
@@ -65,12 +65,12 @@ namespace Neodenit.DialogAssistant.Services
                 }
                 else
                 {
-                    return new Response { Status = ResponseStatus.NoSentences };
+                    return new Response { Status = ResponseStatus.NoCredit };
                 }
             }
             else
             {
-                return new Response { Status = ResponseStatus.NoCredit };
+                return new Response { Status = isFullSentence ? ResponseStatus.Editing : ResponseStatus.NoSentences };
             }
         }
     }
