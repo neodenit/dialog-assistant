@@ -62,7 +62,7 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
             dbContext.SaveChanges();
         }
 
-        public async Task SaveAsync(CancellationToken token)
+        public async Task SaveAsync(CancellationToken token = default)
         {
             await dbContext.SaveChangesAsync(token);
         }

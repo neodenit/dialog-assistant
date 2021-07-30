@@ -35,22 +35,24 @@ namespace Neodenit.DialogAssistant.Services
 
             if (isFullSentence && prevStatus == ResponseStatus.NoSentences)
             {
-                var dbDialog = dialogRepository.GetByUserNames(message.Sender.Name, message.Receiver.Name);
+                var dbDialog = await dialogRepository.GetByUserNamesOrCreateEmptyAsync(message.Sender.Name, message.Receiver.Name);
+
+                var messages = dbDialog.Messages?.Append(message).ToList() ?? new List<Message> { message };
+
+                var filteredMessages = settings.MessageLimit > 0 ? messages.TakeLast(settings.MessageLimit).ToList() : messages;
 
                 var dialog = new Dialog
                 {
-                    Messages = dbDialog?.Messages?.Append(message).ToList() ?? new List<Message>(),
-                    User1 = dbDialog?.User1 ?? message.Sender,
-                    User2 = dbDialog?.User2 ?? message.Receiver
+                    Messages = filteredMessages,
+                    User1 = dbDialog.User1,
+                    User2 = dbDialog.User2
                 };
 
-                if (settings.MessageLimit > 0)
-                {
-                    dialog.Messages = dialog.Messages.TakeLast(settings.MessageLimit).ToList();
-                }
-
                 string dialogText = textService.GetDialogText(dialog);
-                string dialogTextWithReceiver = $"{dialogText}{Constants.MessageSeparator}{nameof(Dialog.User2)}:";
+
+                string receiverPlaceholder = dialog.User1.Name == message.Receiver.Name ? nameof(Dialog.User1) : nameof(Dialog.User2);
+
+                string dialogTextWithReceiver = $"{dialogText}{Constants.MessageSeparator}{receiverPlaceholder}:";
 
                 bool hasCredit = limitCheckerService.CheckLimit(dialogTextWithReceiver, message.Sender.Name);
 
