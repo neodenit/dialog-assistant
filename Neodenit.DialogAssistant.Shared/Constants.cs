@@ -8,15 +8,17 @@ namespace Neodenit.DialogAssistant.Shared
 
         public const string MessageSeparator = "\n";
 
+        public const string SenderPlaceholder = "Me";
+
+        public const string ReceiverPlaceholder = "You";
+
         public const string LengthFinishReason = "length";
 
         public const string Ellipsis = "...";
 
-        public const string FakeUser = "User3";
-
         public static readonly string[] StopSequences1 = { "\n", ".", "?", "!" };
 
-        public static readonly string[] StopSequences2 = { $"{nameof(Dialog.User1)}:", $"{nameof(Dialog.User2)}:", FakeUser };
+        public static readonly string[] StopSequences2 = { $"{SenderPlaceholder}:", $"{ReceiverPlaceholder}:" };
 
         public static readonly string[] SentenceEndings = { ".", "?", "!" };
     }

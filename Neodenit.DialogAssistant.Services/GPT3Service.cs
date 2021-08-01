@@ -49,10 +49,7 @@ namespace Neodenit.DialogAssistant.Services
                 };
 
                 string dialogText = textService.GetDialogText(dialog);
-
-                string receiverPlaceholder = dialog.User1.Name == message.Receiver.Name ? nameof(Dialog.User1) : nameof(Dialog.User2);
-
-                string dialogTextWithReceiver = $"{dialogText}{Constants.MessageSeparator}{receiverPlaceholder}:";
+                string dialogTextWithReceiver = $"{dialogText}{Constants.MessageSeparator}{Constants.ReceiverPlaceholder}:";
 
                 bool hasCredit = limitCheckerService.CheckLimit(dialogTextWithReceiver, message.Sender.Name);
 
