@@ -59,13 +59,14 @@ namespace Neodenit.DialogAssistant.Services
                 if (hasCredit)
                 {
                     var api = new OpenAIAPI(settings.ApiKeys, new Engine(settings.Engine));
-                    CompletionResult completionResult = await api.Completions.CreateCompletionAsync(dialogTextWithReceiver, settings.MaxTokens, stopSequences: Constants.StopSequences2);
+                    CompletionResult completionResult = await api.Completions.CreateCompletionAsync(dialogTextWithReceiver, settings.MaxTokens, settings.Temperature, stopSequences: Constants.StopSequences2);
                     var completion = completionResult.Completions.First();
                     var predictionText = completion.FinishReason == Constants.LengthFinishReason ? $"{completion.Text}{Constants.Ellipsis}" : completion.Text;
 
-
-                    logger.LogInformation(dialogTextWithReceiver);
-                    logger.LogInformation(completion.Text);
+                    logger.LogInformation("Engine: {0}", settings.Engine);
+                    logger.LogInformation("Temperature: {0}", settings.Temperature);
+                    logger.LogInformation("Prompt:{0}{1}", Constants.MessageSeparator, dialogTextWithReceiver);
+                    logger.LogInformation("Completion:{1}", completion.Text);
 
                     await limitCheckerService.UpdateLimitAsync(message.Sender.Name, dialogTextWithReceiver, predictionText);
                     double credit = limitCheckerService.GetLimit(message.Sender.Name);

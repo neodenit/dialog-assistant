@@ -12,6 +12,8 @@
 
         string Engine { get; set; }
 
+        public double Temperature { get; set; }
+
         public double DavinciPrice { get; set; }
 
         public double CuriePrice { get; set; }
