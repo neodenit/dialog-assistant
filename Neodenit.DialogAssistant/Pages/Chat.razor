@@ -9,11 +9,12 @@
 @implements IAsyncDisposable
 <AuthorizeView>
     <Authorized>
-        <div class="alert alert-success pb-3">
+
+        <div class="alert alert-info d-none d-sm-block pb-3">
             Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(Receiver).
         </div>
 
-        <ul class="list-group pb-3">
+        <ul class="list-group message-container mb-3">
             @foreach (var message in messages)
             {
                 <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
@@ -29,16 +30,21 @@
             </div>
         }
 
-        <div class="alert alert-warning pb-3">
-            Your daily credit: @(credit)%
-        </div>
-
-        <div class="input-group">
-            <input @bind="messageInput" @oninput="Predict" type="text" class="form-control" placeholder="Message" autofocus>
-            <div class="input-group-append">
-                <button @onclick="Send" disabled="@(!IsConnected)" class="btn btn-outline-secondary" type="button">Send</button>
+        @if (credit.HasValue)
+        {
+            <div class="alert alert-warning pb-3">
+                Daily prediction limit: @(credit.Value.ToString("P"))
             </div>
-        </div>
+        }
+
+        <form @onsubmit=Send>
+            <div class="input-group pb-3">
+                <input disabled="@(!IsConnected)" @bind="messageInput" @oninput="Predict" type="text" class="form-control" placeholder="Message" autofocus>
+                <div class="input-group-append">
+                    <button disabled="@(!IsConnected)" class="btn btn-outline-secondary" type="submit">Send</button>
+                </div>
+            </div>
+        </form>
 
         @code {
             [Parameter]
@@ -46,11 +52,10 @@
 
             private HubConnection hubConnection;
             private List<Message> messages;
-            private string userInput;
             private string messageInput;
 
             private string prediction;
-            private double credit = 100;
+            private double? credit;
             private ResponseStatus status;
 
             protected override async Task OnInitializedAsync()
@@ -102,10 +107,20 @@
 
                 status = result.Status;
 
-                if (status == ResponseStatus.Success)
+                switch (status)
                 {
-                    prediction = result.Text;
-                    credit = 100 - result.Credit * 100;
+                    case ResponseStatus.Success:
+                        prediction = result.Text;
+                        credit = 1 - result.Credit;
+                        break;
+                    case ResponseStatus.NoCredit:
+                        prediction = string.Empty;
+                        credit = 0;
+                        break;
+                    default:
+                        prediction = string.Empty;
+                        break;
+
                 }
             }
 

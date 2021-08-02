@@ -1,0 +1,17 @@
+﻿.message-container {
+    overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+@media (max-width: 640.99px) {
+    .message-container {
+        max-height: 300px;
+    }
+}
+
+@media (min-width: 641px) {
+    .message-container {
+        max-height: 500px;
+    }
+}
