@@ -14,12 +14,14 @@
             Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(Receiver).
         </div>
 
-        <ul class="list-group message-container mb-3">
-            @foreach (var message in messages)
-            {
-                <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
-            }
-        </ul>
+        <div class="message-container mb-3">
+            <ul class="list-group">
+                @foreach (var message in messages)
+                {
+                    <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
+                }
+            </ul>
+        </div>
 
         @if (!string.IsNullOrEmpty(prediction))
         {
