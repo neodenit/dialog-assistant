@@ -70,18 +70,12 @@
                 .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
                 .Build();
 
-                hubConnection.On<Message>("ReceiveMessage", async (message) =>
+                hubConnection.On<Message>("ReceiveMessage", message =>
                 {
-
                     if ((message.Sender.Name == userName || message.Receiver.Name == userName) && message.Sender.Name != message.Receiver.Name)
                     {
                         messages.Add(message);
                         StateHasChanged();
-
-                        if (message.Sender.Name == userName)
-                        {
-                            await DialogService.AddMessageToDialogAsync(message);
-                        }
                     }
                 });
 
@@ -98,7 +92,7 @@
             }
 
             public bool IsConnected =>
-            hubConnection.State == HubConnectionState.Connected;
+                hubConnection.State == HubConnectionState.Connected;
 
             async Task Predict(ChangeEventArgs e)
             {
