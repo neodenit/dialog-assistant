@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using BlazorServerSignalRApp.Server.Hubs;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -82,10 +80,8 @@ namespace Neodenit.DialogAssistant
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContext dbContext, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, DbContext dbContext)
         {
-            GlobalHost.DependencyResolver = new CustomSignalRDependencyResolver(serviceProvider);
-
             dbContext.Database.Migrate();
 
             app.UseResponseCompression();
