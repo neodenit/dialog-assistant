@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using Neodenit.DialogAssistant.Shared.Models;
 
 namespace BlazorServerSignalRApp.Server.Hubs
 {
+    [Authorize]
     public class ChatHub : Hub
     {
         private readonly IDialogService dialogService;

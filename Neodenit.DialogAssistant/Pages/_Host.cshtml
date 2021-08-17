@@ -5,6 +5,10 @@
     Layout = null;
 }
 
+@{
+    var cookie = HttpContext.Request.Cookies[".AspNetCore.Identity.Application"];
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,7 +21,7 @@
     <link href="Neodenit.DialogAssistant.styles.css" rel="stylesheet" />
 </head>
 <body>
-    <component type="typeof(App)" render-mode="ServerPrerendered" />
+    <component type="typeof(App)" render-mode="Server" param-Cookie="cookie" />
 
     <div id="blazor-error-ui">
         <environment include="Staging,Production">

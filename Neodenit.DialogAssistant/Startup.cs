@@ -43,6 +43,7 @@ namespace Neodenit.DialogAssistant
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddScoped<DbContext, ApplicationDbContext>();
+            services.AddScoped<CookiesProvider>();
 
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));
             services.AddTransient(typeof(IDialogRepository), typeof(DialogRepository));

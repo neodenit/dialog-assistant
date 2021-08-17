@@ -1,3 +1,5 @@
+@inject CookiesProvider CookiesProvider
+
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
         <Found Context="routeData">
@@ -10,3 +12,15 @@
         </NotFound>
     </Router>
 </CascadingAuthenticationState>
+
+@code{
+    [Parameter]
+    public string Cookie { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        CookiesProvider.Cookie = Cookie;
+
+        return base.OnInitializedAsync();
+    }
+}

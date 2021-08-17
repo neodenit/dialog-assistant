@@ -1,11 +1,16 @@
 ﻿@page "/chat/{receiver}/"
+@using System.Net
+@using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
 @using Neodenit.DialogAssistant.Shared.Interfaces
 @using Neodenit.DialogAssistant.Shared.Models
+
+@inject CookiesProvider CookiesProvider
 @inject NavigationManager NavigationManager
 @inject IDialogService DialogService
 @inject IGPT3Service GPT3Service
 @inject IAuthService AuthService
+
 @implements IAsyncDisposable
 <AuthorizeView>
     <Authorized>
@@ -64,10 +69,24 @@
             {
                 var userName = await AuthService.GetNameAsync();
 
+                var container = new CookieContainer();
+                var cookie = new Cookie
+                {
+                    Name = ".AspNetCore.Identity.Application",
+                    Domain = "localhost",
+                    Value = CookiesProvider.Cookie
+                };
+
+                container.Add(cookie);
+
                 var dialog = DialogService.GetDialogForMessage(new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver } });
                 messages = dialog is null ? new List<Message>() : dialog.Messages.ToList();
+
                 hubConnection = new HubConnectionBuilder()
-                .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
+                .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"), options =>
+                {
+                    options.Cookies = container;
+                })
                 .Build();
 
                 hubConnection.On<Message>("ReceiveMessage", message =>
