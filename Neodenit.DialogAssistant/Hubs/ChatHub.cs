@@ -19,9 +19,15 @@ namespace BlazorServerSignalRApp.Server.Hubs
 
         public async Task SendMessage(Message message)
         {
-            await Clients.All.SendAsync("ReceiveMessage", message);
+            await Clients.Groups(message.Receiver.Name).SendAsync("ReceiveMessage", message);
 
             await dialogService.AddMessageToDialogAsync(message);
+        }
+
+        public async override Task OnConnectedAsync()
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, Context.User.Identity.Name);
+            await base.OnConnectedAsync();
         }
     }
 }

@@ -104,10 +104,14 @@
             async Task Send()
             {
                 var userName = await AuthService.GetNameAsync();
+                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = messageInput };
 
-                await hubConnection.SendAsync("SendMessage", new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = messageInput });
+                await hubConnection.SendAsync("SendMessage", message);
 
                 messageInput = string.Empty;
+
+                messages.Add(message);
+                StateHasChanged();
             }
 
             public bool IsConnected =>
