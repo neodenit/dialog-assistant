@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using Neodenit.DialogAssistant.Shared.Models;
@@ -19,9 +21,12 @@ namespace BlazorServerSignalRApp.Server.Hubs
 
         public async Task SendMessage(Message message)
         {
-            await Clients.Groups(message.Receiver.Name).SendAsync("ReceiveMessage", message);
+            if (message.Sender.Name == Context.User.Identity.Name && message.Receiver.Name != message.Sender.Name)
+            {
+                await Clients.Groups(message.Receiver.Name).SendAsync("ReceiveMessage", message);
 
-            await dialogService.AddMessageToDialogAsync(message);
+                await dialogService.AddMessageToDialogAsync(message);
+            }
         }
 
         public async override Task OnConnectedAsync()
