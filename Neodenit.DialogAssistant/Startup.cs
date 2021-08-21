@@ -53,6 +53,9 @@ namespace Neodenit.DialogAssistant
             services.AddTransient<IDialogService, DialogService>();
             services.AddTransient<IIdentityUserService, IdentityUserService>();
             services.AddTransient<IGPT3Service, GPT3Service>();
+            services.AddTransient<ILoggingService, LoggingService>();
+            services.AddTransient<IPredictionService, PredictionService>();
+            services.AddTransient<IRequestService, RequestService>();
             services.AddTransient<ITokenLimitService, TokenLimitService>();
             services.AddTransient<IPricingService, PricingService>();
             services.AddTransient<ITextService, TextService>();
