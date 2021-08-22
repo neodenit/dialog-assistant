@@ -24,8 +24,9 @@ namespace Neodenit.DialogAssistant.Services
             var requestPrice = pricingService.GetPrice(request);
             var maxResponcePrice = pricingService.GetPrice(settings.MaxTokens);
             var totalPrice = requestPrice + maxResponcePrice;
+            var creditUsed = user.LastRequestDate == DateTime.UtcNow.Date ? user.CreditUsed : 0;
 
-            var hasCredit = user.CreditUsed + totalPrice < settings.DailyCreditLimit;
+            var hasCredit = creditUsed + totalPrice < settings.DailyCreditLimit;
             return hasCredit;
         }
 
@@ -36,9 +37,10 @@ namespace Neodenit.DialogAssistant.Services
             var requestPrice = pricingService.GetPrice(request);
             var responsePrice = pricingService.GetPrice(response);
             var totalPrice = requestPrice + responsePrice;
+            var oldCredit = user.LastRequestDate == DateTime.UtcNow.Date ? user.CreditUsed : 0;
 
+            user.CreditUsed = oldCredit + totalPrice;
             user.LastRequestDate = DateTime.UtcNow.Date;
-            user.CreditUsed += totalPrice;
 
             await userRepository.SaveAsync();
         }
