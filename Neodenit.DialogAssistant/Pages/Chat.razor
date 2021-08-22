@@ -10,6 +10,7 @@
 @inject IDialogService DialogService
 @inject IPredictionService PredictionService
 @inject IAuthService AuthService
+@inject ISettings Settings
 
 @implements IAsyncDisposable
 <AuthorizeView>
@@ -73,7 +74,7 @@
                 var cookie = new Cookie
                 {
                     Name = ".AspNetCore.Identity.Application",
-                    Domain = "localhost",
+                    Domain = Settings.DomainName,
                     Value = CookiesProvider.Cookie
                 };
 

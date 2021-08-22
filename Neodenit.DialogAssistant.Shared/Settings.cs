@@ -4,6 +4,8 @@ namespace Neodenit.DialogAssistant.Shared
 {
     public class Settings : ISettings
     {
+        public string DomainName { get; set; }
+
         public int MaxTokens { get; set; }
 
         public double DailyCreditLimit { get; set; }

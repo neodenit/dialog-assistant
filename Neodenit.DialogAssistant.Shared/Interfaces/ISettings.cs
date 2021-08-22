@@ -2,6 +2,8 @@
 {
     public interface ISettings
     {
+        public string DomainName { get; set; }
+
         public int MaxTokens { get; set; }
 
         public int MessageLimit { get; set; }
