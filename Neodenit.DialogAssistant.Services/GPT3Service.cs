@@ -12,7 +12,7 @@ namespace Neodenit.DialogAssistant.Services
         private readonly ILoggingService loggingService;
         private readonly ISettings settings;
 
-        public GPT3Service(ILoggingService loggingService,  ISettings settings)
+        public GPT3Service(ILoggingService loggingService, ISettings settings)
         {
             this.loggingService = loggingService ?? throw new ArgumentNullException(nameof(loggingService));
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
@@ -20,7 +20,7 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task<string> GetCompletion(string request)
         {
-            var api = new OpenAIAPI(settings.ApiKeys, new Engine(settings.Engine));
+            var api = new OpenAIAPI(APIAuthentication.LoadFromEnv(), new Engine(settings.Engine));
             CompletionResult completionResult = await api.Completions.CreateCompletionAsync(request, settings.MaxTokens, settings.Temperature, stopSequences: Constants.StopSequences2);
             var completion = completionResult.Completions.First();
             var completionText = completion.Text;

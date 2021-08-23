@@ -14,8 +14,6 @@ namespace Neodenit.DialogAssistant.Shared
 
         public int MessageNumber { get; set; }
 
-        public string ApiKeys { get; set; }
-
         public string Engine { get; set; }
 
         public double Temperature { get; set; }

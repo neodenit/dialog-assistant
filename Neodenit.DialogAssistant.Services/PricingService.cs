@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Neodenit.DialogAssistant.Shared;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using OpenAI_API;

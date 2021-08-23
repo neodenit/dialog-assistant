@@ -24,7 +24,7 @@ namespace Neodenit.DialogAssistant.Services
 
         public bool IsFullSentence(string text)
         {
-            if(string.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
                 return false;
             }

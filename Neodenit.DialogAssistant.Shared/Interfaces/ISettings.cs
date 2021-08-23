@@ -10,8 +10,6 @@
 
         public double DailyCreditLimit { get; set; }
 
-        public string ApiKeys { get; set; }
-
         string Engine { get; set; }
 
         public double Temperature { get; set; }
