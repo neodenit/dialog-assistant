@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Neodenit.DialogAssistant.Shared.Interfaces;
+using Neodenit.DialogAssistant.Shared.Models;
 
 namespace Neodenit.DialogAssistant.Services
 {
@@ -24,7 +25,7 @@ namespace Neodenit.DialogAssistant.Services
             var requestPrice = pricingService.GetPrice(request);
             var maxResponcePrice = pricingService.GetPrice(settings.MaxTokens);
             var totalPrice = requestPrice + maxResponcePrice;
-            var creditUsed = user.LastRequestDate == DateTime.UtcNow.Date ? user.CreditUsed : 0;
+            var creditUsed = GetCredit(user);
 
             var hasCredit = creditUsed + totalPrice < settings.DailyCreditLimit;
             return hasCredit;
@@ -37,7 +38,7 @@ namespace Neodenit.DialogAssistant.Services
             var requestPrice = pricingService.GetPrice(request);
             var responsePrice = pricingService.GetPrice(response);
             var totalPrice = requestPrice + responsePrice;
-            var oldCredit = user.LastRequestDate == DateTime.UtcNow.Date ? user.CreditUsed : 0;
+            var oldCredit = GetCredit(user);
 
             user.CreditUsed = oldCredit + totalPrice;
             user.LastRequestDate = DateTime.UtcNow.Date;
@@ -49,10 +50,14 @@ namespace Neodenit.DialogAssistant.Services
         {
             var user = userRepository.GetByName(userName);
 
+            var creditUsed = GetCredit(user);
             var maxResponcePrice = pricingService.GetPrice(settings.MaxTokens);
-            var estimatedCredit = user.CreditUsed + maxResponcePrice;
-            var result = estimatedCredit < settings.DailyCreditLimit ? user.CreditUsed / settings.DailyCreditLimit : 0;
+            var estimatedCredit = creditUsed + maxResponcePrice;
+            var result = estimatedCredit < settings.DailyCreditLimit ? creditUsed / settings.DailyCreditLimit : 0;
             return result;
         }
+
+        private static double GetCredit(User user) =>
+            user.LastRequestDate == DateTime.UtcNow.Date ? user.CreditUsed : 0;
     }
 }
