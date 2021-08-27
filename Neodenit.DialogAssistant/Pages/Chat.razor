@@ -50,7 +50,7 @@
 
         <form @onsubmit=Send>
             <div class="input-group pb-3">
-                <input disabled="@(!IsConnected)" @bind="messageInput" @oninput="Predict" type="text" class="form-control" placeholder="Message" autofocus>
+                <input disabled="@(!IsConnected)" @bind="messageInput" @oninput="Predict" type="text" class="form-control" placeholder="Message" required autofocus>
                 <div class="input-group-append">
                     <button disabled="@(!IsConnected)" class="btn btn-outline-secondary" type="submit">Send</button>
                 </div>
