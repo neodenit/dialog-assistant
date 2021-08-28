@@ -23,5 +23,9 @@
         public double AdaPrice { get; set; }
 
         double TokensForPrice { get; set; }
+
+        public string SenderPlaceholder { get; set; }
+
+        public string ReceiverPlaceholder { get; set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Neodenit.DialogAssistant.Shared.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Neodenit.DialogAssistant.Shared.Models;
 
 namespace Neodenit.DialogAssistant.Shared.Interfaces
 {

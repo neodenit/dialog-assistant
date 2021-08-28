@@ -37,7 +37,7 @@ namespace Neodenit.DialogAssistant.Services
             };
 
             string dialogText = textService.GetDialogText(dialog);
-            return $"{dialogText}{Constants.MessageSeparator}{Constants.ReceiverPlaceholder}:";
+            return $"{dialogText}{Constants.MessageSeparator}{settings.ReceiverPlaceholder}:";
         }
     }
 }

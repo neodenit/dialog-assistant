@@ -27,5 +27,9 @@ namespace Neodenit.DialogAssistant.Shared
         public double AdaPrice { get; set; }
 
         public double TokensForPrice { get; set; }
+
+        public string SenderPlaceholder { get; set; }
+
+        public string ReceiverPlaceholder { get; set; }
     }
 }

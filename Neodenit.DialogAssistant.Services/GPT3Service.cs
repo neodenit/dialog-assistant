@@ -20,8 +20,10 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task<string> GetCompletion(string request)
         {
+            var stopSequences = new[] { $"{settings.SenderPlaceholder}:", $"{settings.ReceiverPlaceholder}:" };
+
             var api = new OpenAIAPI(APIAuthentication.LoadFromEnv(), new Engine(settings.Engine));
-            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(request, settings.MaxTokens, settings.Temperature, stopSequences: Constants.StopSequences2);
+            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(request, settings.MaxTokens, settings.Temperature, stopSequences: stopSequences);
             var completion = completionResult.Completions.First();
             var completionText = completion.Text;
 
