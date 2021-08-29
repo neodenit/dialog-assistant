@@ -10,7 +10,7 @@
 
         public double DailyCreditLimit { get; set; }
 
-        string Engine { get; set; }
+        public string Engine { get; set; }
 
         public double Temperature { get; set; }
 
@@ -22,10 +22,16 @@
 
         public double AdaPrice { get; set; }
 
-        double TokensForPrice { get; set; }
+        public double TokensForPrice { get; set; }
 
         public string SenderPlaceholder { get; set; }
 
         public string ReceiverPlaceholder { get; set; }
+
+        public string[] StopSequences { get; set; }
+
+        public string PromptStart { get; set; }
+
+        public string PromptEnd { get; set; }
     }
 }

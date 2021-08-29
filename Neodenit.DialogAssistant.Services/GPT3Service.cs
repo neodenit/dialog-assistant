@@ -20,14 +20,13 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task<string> GetCompletion(string request)
         {
-            var stopSequences = new[] { $"{settings.SenderPlaceholder}:", $"{settings.ReceiverPlaceholder}:" };
-
+            var prompt = settings.PromptStart + request + settings.PromptEnd;
             var api = new OpenAIAPI(APIAuthentication.LoadFromEnv(), new Engine(settings.Engine));
-            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(request, settings.MaxTokens, settings.Temperature, stopSequences: stopSequences);
+            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(prompt, settings.MaxTokens, settings.Temperature, stopSequences: settings.StopSequences);
             var completion = completionResult.Completions.First();
             var completionText = completion.Text;
 
-            loggingService.LogPrediction(request, completionText);
+            loggingService.LogPrediction(prompt, completionText);
 
             var predictionText = completion.FinishReason == Constants.LengthFinishReason ? $"{completionText}{Constants.Ellipsis}" : completionText;
             return predictionText;

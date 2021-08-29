@@ -31,5 +31,11 @@ namespace Neodenit.DialogAssistant.Shared
         public string SenderPlaceholder { get; set; }
 
         public string ReceiverPlaceholder { get; set; }
+
+        public string[] StopSequences { get; set; }
+
+        public string PromptStart { get; set; }
+
+        public string PromptEnd { get; set; }
     }
 }
