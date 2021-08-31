@@ -16,8 +16,8 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task<string> GetNameAsync()
         {
-            var authentState = await authenticationStateProvider.GetAuthenticationStateAsync();
-            var senderName = authentState.User.Identity.Name;
+            AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+            var senderName = authState.User.Identity.Name;
             return senderName;
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using Neodenit.DialogAssistant.Shared;
 using Neodenit.DialogAssistant.Shared.Interfaces;
@@ -20,6 +21,8 @@ namespace Neodenit.DialogAssistant.Services
         {
             logger.LogInformation("Engine: {0}", settings.Engine);
             logger.LogInformation("Temperature: {0}", settings.Temperature);
+            logger.LogInformation("StopSequences: {0}", JsonSerializer.Serialize(settings.StopSequences));
+            logger.LogInformation("MaxTokens: {0}", JsonSerializer.Serialize(settings.MaxTokens));
             logger.LogInformation("Prompt:{0}{1}", Constants.MessageSeparator, request);
             logger.LogInformation("Completion:{1}", completion);
         }
