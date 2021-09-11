@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Identity;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 
-namespace Neodenit.DialogAssistant.Services.Services
+namespace Neodenit.DialogAssistant.Services
 {
     public class IdentityUserService : IIdentityUserService
     {

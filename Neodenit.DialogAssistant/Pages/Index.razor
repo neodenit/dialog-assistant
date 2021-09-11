@@ -1,25 +1,39 @@
 ﻿@page "/"
+
 @using Neodenit.DialogAssistant.Shared.Interfaces;
-@inject IIdentityUserService IdentityUserService
+@using Neodenit.DialogAssistant.Shared.Models
+
+@inject IAuthService AuthService
+@inject IUserService UserService
 
 <AuthorizeView>
     <Authorized>
         <h1>Users</h1>
 
         @{
-            var name = context.User.Identity.Name;
-
-            var users = IdentityUserService.GetAll();
-            var filteredUsers = users.Where(u => u != name);
-            var orderedUsers = filteredUsers.OrderBy(u => u);
-
-            foreach (var user in orderedUsers)
+            if (users is not null)
             {
-                var href = $"chat/{user}/";
+                foreach (var user in users)
+                {
+                    var href = $"chat/{user.ID}/";
 
-                <div class="list-group">
-                    <a href="@href" class="list-group-item list-group-item-action">@user</a>
-                </div>
+                    <div class="list-group">
+                        <a href="@href" class="list-group-item list-group-item-action">@user.DisplayName</a>
+                    </div>
+                }
+            }
+        }
+
+        @code {
+            private IEnumerable<User> users;
+
+            protected override async Task OnInitializedAsync()
+            {
+                string userName = await AuthService.GetNameAsync();
+
+                IEnumerable<User> allUsers = await UserService.GetAllAsync();
+                var filteredUsers = allUsers.Where(u => u.Name != userName);
+                users = filteredUsers.OrderBy(u => u.DisplayName);
             }
         }
 

@@ -27,11 +27,8 @@ namespace Neodenit.DialogAssistant.Services
         {
             message.SendTime = DateTime.UtcNow;
 
-            var dbUser1 = userRepository.GetByName(message.Sender.Name);
-            var dbUser2 = userRepository.GetByName(message.Receiver.Name);
-
-            var user1 = dbUser1 is null ? new User { Name = message.Sender.Name } : dbUser1;
-            var user2 = dbUser2 is null ? new User { Name = message.Receiver.Name } : dbUser2;
+            var user1 = userRepository.GetByName(message.Sender.Name);
+            var user2 = userRepository.GetByName(message.Receiver.Name);
 
             message.Sender = user1;
             message.Receiver = user2;

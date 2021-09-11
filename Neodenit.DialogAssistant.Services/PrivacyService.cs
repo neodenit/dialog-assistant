@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Neodenit.DialogAssistant.Shared;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using Neodenit.DialogAssistant.Shared.Models;
 

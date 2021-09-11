@@ -1,4 +1,4 @@
-﻿@page "/chat/{receiver}/"
+﻿@page "/chat/{receiverId}/"
 @using System.Net
 @using Microsoft.AspNetCore.SignalR
 @using Microsoft.AspNetCore.SignalR.Client
@@ -12,6 +12,7 @@
 @inject IDialogService DialogService
 @inject IPredictionService PredictionService
 @inject ITokenLimitService TokenLimitService
+@inject IUserService UserService
 
 @inject ISettings Settings
 
@@ -20,7 +21,7 @@
     <Authorized>
 
         <div class="alert alert-info d-none d-sm-block pb-3">
-            Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(Receiver).
+            Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(receiver.DisplayName).
         </div>
 
         <div class="message-container mb-3">
@@ -35,7 +36,7 @@
         @if (!string.IsNullOrEmpty(prediction))
         {
             <div class="alert alert-success pb-3">
-                <span class='font-weight-bold'>@Receiver</span>
+                <span class='font-weight-bold'>@receiver.DisplayName</span>
                 may answer something like this:
                 <span class='font-weight-bold'>@prediction</span>
             </div>
@@ -59,7 +60,9 @@
 
         @code {
             [Parameter]
-            public string Receiver { get; set; }
+            public string ReceiverId { get; set; }
+
+            private User receiver;
 
             private HubConnection hubConnection;
             private List<Message> messages;
@@ -73,6 +76,9 @@
             {
                 string userName = await AuthService.GetNameAsync();
 
+                var receiverId = int.Parse(ReceiverId);
+                receiver = await UserService.GetAsync(receiverId);
+
                 var container = new CookieContainer();
                 var cookie = new Cookie
                 {
@@ -83,7 +89,7 @@
 
                 container.Add(cookie);
 
-                Dialog dialog = DialogService.GetDialogForMessage(new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver } });
+                Dialog dialog = DialogService.GetDialogForMessage(new Message { Sender = new User { Name = userName }, Receiver = new User { Name = receiver.Name } });
                 messages = dialog is null ? new List<Message>() : dialog.Messages.ToList();
 
                 double limit = TokenLimitService.GetLimit(userName);
@@ -108,10 +114,10 @@
                 await hubConnection.StartAsync();
             }
 
-            async Task Send()
+            private async Task Send()
             {
                 string userName = await AuthService.GetNameAsync();
-                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = messageInput };
+                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = receiver.Name }, Text = messageInput };
 
                 await hubConnection.SendAsync("SendMessage", message);
 
@@ -121,14 +127,14 @@
                 StateHasChanged();
             }
 
-            public bool IsConnected =>
+            private bool IsConnected =>
                 hubConnection.State == HubConnectionState.Connected;
 
-            async Task Predict(ChangeEventArgs e)
+            private async Task Predict(ChangeEventArgs e)
             {
                 string userName = await AuthService.GetNameAsync();
 
-                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = Receiver }, Text = e.Value.ToString() };
+                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = receiver.Name }, Text = e.Value.ToString() };
                 Response result = await PredictionService.GetPredictionAsync(message, status);
 
                 status = result.Status;

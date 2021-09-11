@@ -8,6 +8,8 @@ namespace Neodenit.DialogAssistant.Shared.Models
 
         public string Name { get; set; }
 
+        public string DisplayName { get; set; }
+
         public double CreditUsed { get; set; }
 
         public DateTime LastRequestDate { get; set; }

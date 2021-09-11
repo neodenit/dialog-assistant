@@ -33,11 +33,8 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
 
             if (dbDialog is null)
             {
-                var dbUser1 = userRepository.GetByName(userName1);
-                var dbUser2 = userRepository.GetByName(userName2);
-
-                var user1 = dbUser1 is null ? new User { Name = userName1 } : dbUser1;
-                var user2 = dbUser2 is null ? new User { Name = userName2 } : dbUser2;
+                var user1 = userRepository.GetByName(userName1);
+                var user2 = userRepository.GetByName(userName2);
 
                 var emptyDialog = new Dialog { User1 = user1, User2 = user2 };
 

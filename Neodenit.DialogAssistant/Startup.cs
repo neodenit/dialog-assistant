@@ -13,7 +13,6 @@ using Neodenit.DialogAssistant.Areas.Identity;
 using Neodenit.DialogAssistant.DataAccess;
 using Neodenit.DialogAssistant.DataAccess.Repositories;
 using Neodenit.DialogAssistant.Services;
-using Neodenit.DialogAssistant.Services.Services;
 using Neodenit.DialogAssistant.Shared;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 
@@ -52,6 +51,7 @@ namespace Neodenit.DialogAssistant
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IDialogService, DialogService>();
             services.AddTransient<IIdentityUserService, IdentityUserService>();
+            services.AddTransient<IUserService, UserService>();
             services.AddTransient<IGPT3Service, GPT3Service>();
             services.AddTransient<ILoggingService, LoggingService>();
             services.AddTransient<IPredictionService, PredictionService>();
