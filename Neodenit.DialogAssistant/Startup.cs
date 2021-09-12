@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -60,6 +61,7 @@ namespace Neodenit.DialogAssistant
             services.AddTransient<IPricingService, PricingService>();
             services.AddTransient<ITextService, TextService>();
             services.AddTransient<IPrivacyService, PrivacyService>();
+            services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddSingleton<ISettings>(provider =>
             {

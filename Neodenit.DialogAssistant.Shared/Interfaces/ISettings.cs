@@ -33,5 +33,9 @@
         public string PromptStart { get; set; }
 
         public string PromptEnd { get; set; }
+
+        string EmailAddress { get; set; }
+
+        string EmailSenderName { get; set; }
     }
 }

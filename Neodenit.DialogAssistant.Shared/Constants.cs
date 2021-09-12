@@ -10,6 +10,8 @@
 
         public const string Ellipsis = "...";
 
+        public const string SendGridKey = "SENDGRID_KEY";
+
         public static readonly string[] SentenceEndings = { ".", "?", "!" };
     }
 }

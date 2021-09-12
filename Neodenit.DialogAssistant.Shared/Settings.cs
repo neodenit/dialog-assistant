@@ -37,5 +37,9 @@ namespace Neodenit.DialogAssistant.Shared
         public string PromptStart { get; set; }
 
         public string PromptEnd { get; set; }
+
+        public string EmailAddress { get; set; }
+
+        public string EmailSenderName { get; set; }
     }
 }
