@@ -9,5 +9,7 @@ namespace Neodenit.DialogAssistant.Shared.Interfaces
         Task<IEnumerable<User>> GetAllAsync();
 
         Task<User> GetAsync(int id);
+
+        User GetByName(string name);
     }
 }

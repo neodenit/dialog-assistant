@@ -8,9 +8,9 @@ namespace Neodenit.DialogAssistant.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<User> repository;
+        private readonly IUserRepository repository;
 
-        public UserService(IRepository<User> repository)
+        public UserService(IUserRepository repository)
         {
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
@@ -18,5 +18,7 @@ namespace Neodenit.DialogAssistant.Services
         public async Task<IEnumerable<User>> GetAllAsync() => await repository.GetAllAsync();
 
         public async Task<User> GetAsync(int id) => await repository.GetAsync(id);
+
+        public User GetByName(string name) => repository.GetByName(name);
     }
 }
