@@ -20,18 +20,24 @@
 <AuthorizeView>
     <Authorized>
 
-        <div class="alert alert-info d-none d-sm-block pb-3">
-            Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(receiver.DisplayName).
-        </div>
+        @if (receiver is not null)
+        {
+            <div class="alert alert-info d-none d-sm-block pb-3">
+                Write your message with punctuation marks and get a GPT-3 prediction based on your conversation with @(receiver.DisplayName).
+            </div>
+        }
 
-        <div class="message-container mb-3">
-            <ul class="list-group">
-                @foreach (var message in messages)
-                {
-                    <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
-                }
-            </ul>
-        </div>
+        @if (messages is not null)
+        {
+            <div class="message-container mb-3">
+                <ul class="list-group">
+                    @foreach (var message in messages)
+                    {
+                        <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
+                    }
+                </ul>
+            </div>
+        }
 
         @if (!string.IsNullOrEmpty(prediction))
         {
@@ -128,7 +134,7 @@
             }
 
             private bool IsConnected =>
-                hubConnection.State == HubConnectionState.Connected;
+                hubConnection?.State == HubConnectionState.Connected;
 
             private async Task Predict(ChangeEventArgs e)
             {
