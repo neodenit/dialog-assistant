@@ -1,9 +1,10 @@
-﻿using Neodenit.DialogAssistant.Shared.Models;
+﻿using System.Threading.Tasks;
+using Neodenit.DialogAssistant.Shared.Models;
 
 namespace Neodenit.DialogAssistant.Shared.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {
-        User GetByName(string name);
+        Task<User> GetByNameAsync(string name);
     }
 }

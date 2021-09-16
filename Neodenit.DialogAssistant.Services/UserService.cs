@@ -19,6 +19,6 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task<User> GetAsync(int id) => await repository.GetAsync(id);
 
-        public User GetByName(string name) => repository.GetByName(name);
+        public async Task<User> GetByNameAsync(string name) => await repository.GetByNameAsync(name);
     }
 }

@@ -47,7 +47,7 @@ namespace Neodenit.DialogAssistant.Areas.Identity.Pages.Account.Manage
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
-            var appUser = _userRepository.GetByName(userName);
+            var appUser = await _userRepository.GetByNameAsync(userName);
             var displayName = appUser.DisplayName;
 
             Username = userName;
@@ -85,7 +85,7 @@ namespace Neodenit.DialogAssistant.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var appUser = _userRepository.GetByName(user.UserName);
+            var appUser = await _userRepository.GetByNameAsync(user.UserName);
             if (Input.DisplayName != appUser.DisplayName)
             {
                 appUser.DisplayName = Input.DisplayName;

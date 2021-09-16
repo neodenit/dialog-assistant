@@ -18,10 +18,11 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
         public Dialog GetByUserNames(string user1, string user2)
         {
             var dialog = dbSet
-                .Include(nameof(Dialog.User1))
-                .Include(nameof(Dialog.User2))
-                .Include(nameof(Dialog.Messages))
-                .SingleOrDefault(d => d.User1.Name == user1 && d.User2.Name == user2 ||
+                .Include(x => x.User1)
+                .Include(x => x.User2)
+                .Include(x => x.Messages)
+                .SingleOrDefault(d =>
+                    d.User1.Name == user1 && d.User2.Name == user2 ||
                     d.User1.Name == user2 && d.User2.Name == user1);
 
             return dialog;
@@ -33,12 +34,12 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
 
             if (dbDialog is null)
             {
-                var user1 = userRepository.GetByName(userName1);
-                var user2 = userRepository.GetByName(userName2);
+                var user1 = await userRepository.GetByNameAsync(userName1);
+                var user2 = await userRepository.GetByNameAsync(userName2);
 
                 var emptyDialog = new Dialog { User1 = user1, User2 = user2 };
 
-                await CreateAsync(emptyDialog);
+                Create(emptyDialog);
 
                 await SaveAsync();
 

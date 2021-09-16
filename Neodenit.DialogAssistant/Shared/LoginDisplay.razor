@@ -1,15 +1,35 @@
 ﻿@using Neodenit.DialogAssistant.Shared.Interfaces
+@using Neodenit.DialogAssistant.Shared.Models
+
+@inject IAuthService AuthService
 @inject IUserService UserService
 
 <AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @UserService.GetByName(context.User.Identity.Name).DisplayName!</a>
+
+        @if (user is not null)
+        {
+            <a href="Identity/Account/Manage">Hello, @user.DisplayName!</a>
+        }
+
         <form method="post" action="Identity/Account/LogOut">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
+
+        @code {
+            private User user;
+
+            protected override async Task OnInitializedAsync()
+            {
+                string userName = await AuthService.GetNameAsync();
+                user = await UserService.GetByNameAsync(userName);
+            }
+        }
+
     </Authorized>
     <NotAuthorized>
         <a href="Identity/Account/Register">Register</a>
         <a href="Identity/Account/Login">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
+

@@ -28,28 +28,13 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
 
         public void Create(T entity)
         {
-            dbSet.Add(entity);
+            dbContext.Attach(entity);
+            dbContext.Entry(entity).State = EntityState.Added;
         }
 
-        public async Task CreateAsync(T entity)
+        public void Update(T entity)
         {
-            await dbSet.AddAsync(entity);
-        }
-
-        public void Create(IEnumerable<T> entities)
-        {
-            dbSet.AddRange(entities);
-        }
-
-        public async Task CreateAsync(IEnumerable<T> entities)
-        {
-            await dbSet.AddRangeAsync(entities);
-        }
-
-        public async Task UpdateAsync(T entity, int id)
-        {
-            var originalEntity = await dbSet.FindAsync(id);
-            dbContext.Entry(originalEntity).CurrentValues.SetValues(entity);
+            dbContext.Entry(entity).State = EntityState.Modified;
         }
 
         public void Delete(T entity)
@@ -57,14 +42,9 @@ namespace Neodenit.DialogAssistant.DataAccess.Repositories
             dbSet.Remove(entity);
         }
 
-        public void Save()
+        public async Task SaveAsync()
         {
-            dbContext.SaveChanges();
-        }
-
-        public async Task SaveAsync(CancellationToken token = default)
-        {
-            await dbContext.SaveChangesAsync(token);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

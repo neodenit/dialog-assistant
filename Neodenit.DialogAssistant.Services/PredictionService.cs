@@ -30,7 +30,7 @@ namespace Neodenit.DialogAssistant.Services
             {
                 string request = await requestService.GetRequest(message);
 
-                bool hasCredit = limitCheckerService.CheckLimit(request, message.Sender.Name);
+                bool hasCredit = await limitCheckerService.CheckLimitAsync(request, message.Sender.Name);
 
                 if (hasCredit)
                 {
@@ -38,7 +38,7 @@ namespace Neodenit.DialogAssistant.Services
 
                     await limitCheckerService.UpdateLimitAsync(message.Sender.Name, request, predictionText);
 
-                    double credit = limitCheckerService.GetLimit(message.Sender.Name);
+                    double credit = await limitCheckerService.GetLimitAsync(message.Sender.Name);
 
                     return new Response { Status = ResponseStatus.Success, Text = predictionText, Credit = credit };
                 }

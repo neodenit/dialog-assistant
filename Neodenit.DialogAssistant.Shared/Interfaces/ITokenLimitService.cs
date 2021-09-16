@@ -4,10 +4,10 @@ namespace Neodenit.DialogAssistant.Shared.Interfaces
 {
     public interface ITokenLimitService
     {
-        bool CheckLimit(string request, string userName);
+        Task<bool> CheckLimitAsync(string request, string userName);
 
         Task UpdateLimitAsync(string userName, string request, string response);
 
-        double GetLimit(string userName);
+        Task<double> GetLimitAsync(string userName);
     }
 }

@@ -87,7 +87,7 @@ namespace Neodenit.DialogAssistant.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
-                    await _userRepository.CreateAsync(new User { Name = Input.Email, DisplayName = Input.Name });
+                    _userRepository.Create(new User { Name = Input.Email, DisplayName = Input.Name });
                     await _userRepository.SaveAsync();
 
                     _logger.LogInformation("User created a new account with password.");

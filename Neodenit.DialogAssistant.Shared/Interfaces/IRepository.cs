@@ -16,18 +16,10 @@ namespace Neodenit.DialogAssistant.Shared.Interfaces
 
         void Create(T entity);
 
-        Task CreateAsync(T entity);
-
-        void Create(IEnumerable<T> entities);
-
-        Task CreateAsync(IEnumerable<T> entities);
-
-        Task UpdateAsync(T entity, int id);
+        void Update(T entity);
 
         void Delete(T entity);
 
-        void Save();
-
-        Task SaveAsync(CancellationToken token = default);
+        Task SaveAsync();
     }
 }

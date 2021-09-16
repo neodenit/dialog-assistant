@@ -13,5 +13,7 @@ namespace Neodenit.DialogAssistant.Shared.Models
         public User Receiver { get; set; }
 
         public DateTime SendTime { get; set; }
+
+        public int DialogID { get; set; }
     }
 }

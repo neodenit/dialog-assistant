@@ -34,7 +34,8 @@ namespace Neodenit.DialogAssistant
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
+                    Configuration.GetConnectionString("DefaultConnection")),
+                ServiceLifetime.Transient);
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
@@ -42,7 +43,7 @@ namespace Neodenit.DialogAssistant
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddScoped<DbContext, ApplicationDbContext>();
+            services.AddTransient<DbContext, ApplicationDbContext>();
             services.AddScoped<CookiesProvider>();
 
             services.AddTransient(typeof(IRepository<>), typeof(EFRepository<>));

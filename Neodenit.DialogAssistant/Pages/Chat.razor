@@ -33,7 +33,7 @@
                 <ul class="list-group">
                     @foreach (var message in messages)
                     {
-                        <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.Name):</span> @(message.Text)</li>
+                        <li class="list-group-item"><span class="font-weight-bold">@(message.Sender.DisplayName):</span> @(message.Text)</li>
                     }
                 </ul>
             </div>
@@ -98,7 +98,7 @@
                 Dialog dialog = DialogService.GetDialogForMessage(new Message { Sender = new User { Name = userName }, Receiver = new User { Name = receiver.Name } });
                 messages = dialog is null ? new List<Message>() : dialog.Messages.ToList();
 
-                double limit = TokenLimitService.GetLimit(userName);
+                double limit = await TokenLimitService.GetLimitAsync(userName);
                 credit = 1 - limit;
 
                 hubConnection = new HubConnectionBuilder()
@@ -123,7 +123,9 @@
             private async Task Send()
             {
                 string userName = await AuthService.GetNameAsync();
-                var message = new Message { Sender = new User { Name = userName }, Receiver = new User { Name = receiver.Name }, Text = messageInput };
+                User sender = await UserService.GetByNameAsync(userName);
+
+                var message = new Message { Sender = sender, Receiver = receiver, Text = messageInput };
 
                 await hubConnection.SendAsync("SendMessage", message);
 

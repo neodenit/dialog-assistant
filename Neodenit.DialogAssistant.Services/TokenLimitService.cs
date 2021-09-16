@@ -18,9 +18,9 @@ namespace Neodenit.DialogAssistant.Services
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public bool CheckLimit(string request, string userName)
+        public async Task<bool> CheckLimitAsync(string request, string userName)
         {
-            var user = userRepository.GetByName(userName);
+            var user = await userRepository.GetByNameAsync(userName);
 
             var requestPrice = pricingService.GetPrice(request);
             var maxResponcePrice = pricingService.GetPrice(settings.MaxTokens);
@@ -33,7 +33,7 @@ namespace Neodenit.DialogAssistant.Services
 
         public async Task UpdateLimitAsync(string userName, string request, string response)
         {
-            var user = userRepository.GetByName(userName);
+            var user = await userRepository.GetByNameAsync(userName);
 
             var requestPrice = pricingService.GetPrice(request);
             var responsePrice = pricingService.GetPrice(response);
@@ -46,9 +46,9 @@ namespace Neodenit.DialogAssistant.Services
             await userRepository.SaveAsync();
         }
 
-        public double GetLimit(string userName)
+        public async Task<double> GetLimitAsync(string userName)
         {
-            var user = userRepository.GetByName(userName);
+            var user = await userRepository.GetByNameAsync(userName);
 
             var creditUsed = GetCredit(user);
             var maxResponcePrice = pricingService.GetPrice(settings.MaxTokens);

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Neodenit.DialogAssistant.Shared.Interfaces;
 using Neodenit.DialogAssistant.Shared.Models;
@@ -8,13 +7,13 @@ namespace Neodenit.DialogAssistant.Services
 {
     public class DialogService : IDialogService
     {
-        private readonly IUserRepository userRepository;
         private readonly IDialogRepository repository;
+        private readonly IRepository<Message> messageRepository;
 
-        public DialogService(IUserRepository userRepository, IDialogRepository repository)
+        public DialogService(IDialogRepository repository, IRepository<Message> messageRepository)
         {
-            this.userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            this.messageRepository = messageRepository ?? throw new ArgumentNullException(nameof(messageRepository));
         }
 
         public Dialog GetDialogForMessage(Message message)
@@ -27,31 +26,29 @@ namespace Neodenit.DialogAssistant.Services
         {
             message.SendTime = DateTime.UtcNow;
 
-            var user1 = userRepository.GetByName(message.Sender.Name);
-            var user2 = userRepository.GetByName(message.Receiver.Name);
-
-            message.Sender = user1;
-            message.Receiver = user2;
-
             Dialog dialog = GetDialogForMessage(message);
 
             if (dialog is null)
             {
                 var newDialog = new Dialog
                 {
-                    User1 = user1,
-                    User2 = user2,
+                    User1 = message.Sender,
+                    User2 = message.Receiver,
                     Messages = new[] { message }
                 };
 
-                await repository.CreateAsync(newDialog);
+                repository.Create(newDialog);
+
+                await repository.SaveAsync();
             }
             else
             {
-                dialog.Messages = dialog.Messages.Append(message).ToList();
-            }
+                message.DialogID = dialog.ID;
 
-            await repository.SaveAsync();
+                messageRepository.Create(message);
+                
+                await messageRepository.SaveAsync();
+            }
         }
     }
 }
