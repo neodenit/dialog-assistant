@@ -2,6 +2,6 @@
 {
     public interface ILoggingService
     {
-        void LogPrediction(string dialogTextWithReceiver, string completion);
+        void LogPrediction(string dialogTextWithReceiver, string prediction);
     }
 }

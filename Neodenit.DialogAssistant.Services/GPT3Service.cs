@@ -29,14 +29,19 @@ namespace Neodenit.DialogAssistant.Services
             var prompt = promptStart + request + promptEnd;
 
             var api = new OpenAIAPI(APIAuthentication.LoadFromEnv(), new Engine(settings.Engine));
-            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(prompt, settings.MaxTokens, settings.Temperature, stopSequences: stopSequences);
-            var completion = completionResult.Completions.First();
-            var completionText = completion.Text;
+            CompletionResult completionResult = await api.Completions.CreateCompletionAsync(prompt, settings.MaxTokens, settings.Temperature, settings.TopP, settings.NumOutputs, stopSequences: stopSequences);
+            
+            var completions = completionResult.Completions.Select(c =>
+                c.FinishReason == Constants.LengthFinishReason
+                    ? $"{c.Text}{Constants.Ellipsis}"
+                    : c.Text);
 
-            loggingService.LogPrediction(prompt, completionText);
+            var completionText = string.Join(Constants.MessageSeparator, completions);
+            var prediction = settings.PredictionStart + completionText;
 
-            var predictionText = completion.FinishReason == Constants.LengthFinishReason ? $"{completionText}{Constants.Ellipsis}" : completionText;
-            return predictionText;
+            loggingService.LogPrediction(prompt, prediction);
+
+            return prediction;
         }
     }
 }

@@ -18,6 +18,10 @@ namespace Neodenit.DialogAssistant.Shared
 
         public double Temperature { get; set; }
 
+        public double TopP { get; set; }
+
+        public int NumOutputs { get; set; }
+
         public double DavinciPrice { get; set; }
 
         public double CuriePrice { get; set; }
@@ -37,6 +41,8 @@ namespace Neodenit.DialogAssistant.Shared
         public string PromptStart { get; set; }
 
         public string PromptEnd { get; set; }
+
+        public string PredictionStart { get; set; }
 
         public string EmailAddress { get; set; }
 

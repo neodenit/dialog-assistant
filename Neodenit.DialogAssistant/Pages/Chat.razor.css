@@ -1,4 +1,8 @@
-﻿.message-container {
+﻿.prediction {
+    white-space: pre-line;
+}
+
+.message-container {
     overflow: auto;
     display: flex;
     flex-direction: column-reverse;

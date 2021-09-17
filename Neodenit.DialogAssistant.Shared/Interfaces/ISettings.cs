@@ -14,6 +14,10 @@
 
         public double Temperature { get; set; }
 
+        public double TopP { get; set; }
+
+        public int NumOutputs { get; set; }
+
         public double DavinciPrice { get; set; }
 
         public double CuriePrice { get; set; }
@@ -34,8 +38,10 @@
 
         public string PromptEnd { get; set; }
 
-        string EmailAddress { get; set; }
+        public string PredictionStart { get; set; }
 
-        string EmailSenderName { get; set; }
+        public string EmailAddress { get; set; }
+
+        public string EmailSenderName { get; set; }
     }
 }

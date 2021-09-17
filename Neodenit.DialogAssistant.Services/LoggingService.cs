@@ -17,14 +17,14 @@ namespace Neodenit.DialogAssistant.Services
             this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
-        public void LogPrediction(string request, string completion)
+        public void LogPrediction(string request, string prediction)
         {
             logger.LogInformation("Engine: {0}", settings.Engine);
             logger.LogInformation("Temperature: {0}", settings.Temperature);
             logger.LogInformation("StopSequences: {0}", JsonSerializer.Serialize(settings.StopSequences));
             logger.LogInformation("MaxTokens: {0}", JsonSerializer.Serialize(settings.MaxTokens));
             logger.LogInformation("Prompt:{0}{1}", Constants.MessageSeparator, request);
-            logger.LogInformation("Completion:{1}", completion);
+            logger.LogInformation("Prediction:{0}{1}", Constants.MessageSeparator, prediction);
         }
     }
 }
