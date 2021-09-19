@@ -6,6 +6,8 @@ namespace Neodenit.DialogAssistant.Shared.Interfaces
     {
         string GetDialogText(Dialog dialog);
 
+        string GetDialogSamplesText(Dialog dialog);
+
         bool IsFullSentence(string text);
     }
 }

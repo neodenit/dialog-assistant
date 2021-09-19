@@ -43,5 +43,11 @@
         public string EmailAddress { get; set; }
 
         public string EmailSenderName { get; set; }
+
+        public bool UseSamples { get; set; }
+
+        public int SampleLength { get; set; }
+
+        public int SampleNumber { get; set; }
     }
 }

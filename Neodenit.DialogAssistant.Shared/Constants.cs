@@ -6,6 +6,8 @@
 
         public const string MessageSeparator = "\n";
 
+        public const string SampleSeparator = "###";
+
         public const string LengthFinishReason = "length";
 
         public const string Ellipsis = "...";
